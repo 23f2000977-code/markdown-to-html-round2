@@ -1,0 +1,77 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Markdown to HTML Converter</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/highlight.js/styles/default.css" rel="stylesheet">
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      background-color: #f8f9fa;
+    }
+    .card {
+      width: 100%;
+      max-width: 600px;
+    }
+    .word-count {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="card-body">
+      <h1 class="card-title text-center">Markdown to HTML Converter</h1>
+      <textarea id="markdown-input" class="form-control" rows="10" placeholder="Enter Markdown here..."></textarea>
+      <h2 class="mt-4">Output:</h2>
+      <div id="markdown-output" class="border p-3"></div>
+      <div id="markdown-word-count" class="word-count">Word Count: 0</div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js/lib/highlight.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Sample Markdown data embedded directly to avoid fetch/CORS issues.
+      const markdownContent = `
+# Sample Heading
+This is a sample markdown file.
+
+## Code Example
+\`\`\`javascript
+console.log('Hello, World!');
+\`\`\`
+`;
+      // Render the initial markdown content
+      document.getElementById('markdown-input').value = markdownContent;
+      convertMarkdown(markdownContent);
+
+      document.getElementById('markdown-input').addEventListener('input', () => {
+        const inputText = document.getElementById('markdown-input').value;
+        convertMarkdown(inputText);
+      });
+
+      function convertMarkdown(input) {
+        const htmlContent = marked(input);
+        document.getElementById('markdown-output').innerHTML = htmlContent;
+        hljs.highlightAll();
+        updateWordCount(input);
+      }
+
+      function updateWordCount(input) {
+        const wordCount = input.trim() ? input.trim().split(/\s+/).length : 0;
+        const formattedCount = new Intl.NumberFormat().format(wordCount);
+        document.getElementById('markdown-word-count').textContent = `Word Count: ${formattedCount}`;
+      }
+    });
+  </script>
+</body>
+</html>
+```
